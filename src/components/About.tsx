@@ -1,3 +1,4 @@
+// e:\Portfolio-2\project\src\components\About.tsx
 import React from 'react';
 import { motion } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
@@ -29,32 +30,32 @@ const About: React.FC = () => {
   };
 
   const specialties = [
-    { 
-      icon: <Brain className="text-primary w-12 h-12" />, 
-      title: "Machine Learning", 
-      description: "Building and implementing ML models to solve real-world problems and extract valuable insights." 
+    {
+      icon: <Brain className="text-primary w-12 h-12" />,
+      title: "Machine Learning",
+      description: "Building and implementing ML models to solve real-world problems and extract valuable insights."
     },
-    { 
-      icon: <LineChart className="text-primary w-12 h-12" />, 
-      title: "Data Visualization", 
-      description: "Creating intuitive and interactive visualizations that communicate complex data insights effectively." 
+    {
+      icon: <LineChart className="text-primary w-12 h-12" />,
+      title: "Data Visualization",
+      description: "Creating intuitive and interactive visualizations that communicate complex data insights effectively."
     },
-    { 
-      icon: <Database className="text-primary w-12 h-12" />, 
-      title: "Data Engineering", 
-      description: "Developing efficient data pipelines and infrastructure to process and analyze large datasets." 
+    {
+      icon: <Database className="text-primary w-12 h-12" />,
+      title: "Data Engineering",
+      description: "Developing efficient data pipelines and infrastructure to process and analyze large datasets."
     },
-    { 
-      icon: <Sparkles className="text-primary w-12 h-12" />, 
-      title: "Generative AI", 
-      description: "Exploring and implementing cutting-edge generative AI models for innovative solutions." 
+    {
+      icon: <Sparkles className="text-primary w-12 h-12" />,
+      title: "Generative AI",
+      description: "Exploring and implementing cutting-edge generative AI models for innovative solutions."
     }
   ];
 
   return (
     <section id="about" className="section bg-background py-20">
       <div className="container mx-auto px-4" ref={ref}>
-        <motion.div 
+        <motion.div
           className="text-center mb-16"
           initial={{ opacity: 0, y: 20 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
@@ -71,20 +72,14 @@ const About: React.FC = () => {
             animate={inView ? { opacity: 1, x: 0 } : {}}
             transition={{ duration: 0.6, delay: 0.2 }}
           >
-            <p className="text-lg leading-relaxed mb-6">
-              I'm a passionate <span className="text-primary">Data Scientist</span> with a strong foundation in machine learning 
-              and data analysis. My journey in data science began during my academic years, where I discovered my passion for 
-              uncovering patterns in complex datasets.
+            {/* --- REWRITTEN TEXT & ADDED text-justify --- */}
+            <p className="text-lg leading-relaxed mb-6 text-justify">
+              Leveraging a strong <span className="text-primary">Computer Science</span> foundation, I operate as a Data Scientist focused on architecting impactful, data-driven solutions. I specialize in applying machine learning and advanced analytics to extract critical insights from complex datasets, effectively solving real-world problems.
             </p>
-            <p className="text-lg leading-relaxed mb-6">
-              With a background in <span className="text-primary">Computer Science</span>, I combine theoretical knowledge 
-              with practical skills to develop machine learning models and data-driven solutions that address real-world challenges.
+            <p className="text-lg leading-relaxed text-justify">
+              Committed to continuous learning at the forefront of AI and data science, I actively contribute to the open-source community and share knowledge through technical writing.
             </p>
-            <p className="text-lg leading-relaxed">
-              I'm constantly learning and staying current with the latest developments in AI and data science.
-              When I'm not coding or analyzing data, I enjoy contributing to open-source projects and sharing my knowledge 
-              through technical blogs.
-            </p>
+            {/* --- END OF CHANGES --- */}
           </motion.div>
 
           <motion.div
@@ -94,7 +89,7 @@ const About: React.FC = () => {
             className="grid grid-cols-1 sm:grid-cols-2 gap-6"
           >
             {specialties.map((specialty, index) => (
-              <motion.div 
+              <motion.div
                 key={index}
                 variants={itemVariants}
                 className="glass rounded-lg p-6 border border-primary/20 hover:border-primary/50 transition-all duration-300"
