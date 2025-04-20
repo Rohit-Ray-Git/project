@@ -48,7 +48,7 @@ const Projects: React.FC = () => {
       title: "Customer Segmentation K-Means",
       description: "Segmentation of customers using K-Means clustering to identify distinct customer groups for targeted marketing strategies.",
       image: project2Image,
-      tags: ["Python", "K-Means", "Elbow", "Hierarchical Clustering"],
+      tags: ["Python", "K-Means", "Elbow", "Hierarchical Clustering", "Streamlit"],
       category: "machine-learning",
       codeLink: "https://github.com/Rohit-Ray-Git/Customer-Segmentation-Using-K-Means-Clustering"
     },
