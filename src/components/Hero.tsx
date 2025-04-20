@@ -1,4 +1,3 @@
-// e:\Portfolio-2\project\src\components\Hero.tsx
 import React, { useState, useEffect } from 'react';
 import { ChevronDown, Download } from 'lucide-react';
 import { Link } from 'react-scroll';

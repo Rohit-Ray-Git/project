@@ -1,4 +1,4 @@
-// e:\Portfolio-2\project\src\components\About.tsx
+
 import React from 'react';
 import { motion } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';

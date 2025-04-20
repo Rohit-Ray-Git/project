@@ -1,4 +1,3 @@
-// e:\Portfolio-2\project\src\components\Skills.tsx
 import React, { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';

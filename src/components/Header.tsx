@@ -1,4 +1,4 @@
-// e:\Portfolio-2\project\src\components\Header.tsx
+
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-scroll';
 import { Menu, X } from 'lucide-react';

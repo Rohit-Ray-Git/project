@@ -1,8 +1,8 @@
-// e:\Portfolio-2\project\src\components\Projects.tsx
-import React, { useState } from 'react';
-import { motion } from 'framer-motion';
+// Projects.tsx
+import React, { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
-import { Github } from 'lucide-react';
+import { Github, ChevronDown, ChevronUp } from 'lucide-react';
 
 // --- IMPORT YOUR PROJECT IMAGES HERE ---
 import project1Image from '../assets/images/projects/customer retention.png';
@@ -26,14 +26,24 @@ interface Project {
   codeLink: string;
 }
 
+// --- Define the IDs of the projects to show initially ---
+const INITIAL_PROJECT_IDS = [4, 6, 8];
+// --- ---
+
+// --- REMOVED Constant ---
+// const INITIAL_PROJECTS_COUNT = 3;
+// --- ---
+
 const Projects: React.FC = () => {
   const [activeFilter, setActiveFilter] = useState<string>('all');
+  const [filteredProjects, setFilteredProjects] = useState<Project[]>([]);
+  const [showAllProjects, setShowAllProjects] = useState<boolean>(false);
   const [ref, inView] = useInView({
-    threshold: 0.1, // Trigger animation when 10% is visible
-    triggerOnce: true // Only trigger animation once
+    threshold: 0.05,
+    triggerOnce: false
   });
 
-  const projects: Project[] = [
+  const allProjects: Project[] = [
     {
       id: 1,
       title: "Customer Retention Analyzer",
@@ -117,9 +127,26 @@ const Projects: React.FC = () => {
     }
   ];
 
-  const filteredProjects = activeFilter === 'all'
-    ? projects
-    : projects.filter(project => project.category === activeFilter);
+  // --- MODIFIED useEffect to manage filtered projects ---
+  useEffect(() => {
+    let projectsToShow: Project[];
+    if (activeFilter === 'all') {
+      if (showAllProjects) {
+        // Show all projects when expanded
+        projectsToShow = allProjects;
+      } else {
+        // Show only the specific initial projects when collapsed
+        projectsToShow = allProjects.filter(project => INITIAL_PROJECT_IDS.includes(project.id));
+        // Optional: Sort them in the order defined in INITIAL_PROJECT_IDS
+        projectsToShow.sort((a, b) => INITIAL_PROJECT_IDS.indexOf(a.id) - INITIAL_PROJECT_IDS.indexOf(b.id));
+      }
+    } else {
+      // When a specific category is selected, always show all projects in that category
+      projectsToShow = allProjects.filter(project => project.category === activeFilter);
+    }
+    setFilteredProjects(projectsToShow);
+  }, [activeFilter, showAllProjects]); // Dependency array remains the same
+  // --- ---
 
   const filters = [
     { key: 'all', label: 'All Projects' },
@@ -130,14 +157,38 @@ const Projects: React.FC = () => {
     { key: 'cloud', label: 'Cloud' },
   ];
 
+  const handleToggleShowAll = () => {
+    setShowAllProjects(prev => !prev);
+  };
+
+  const handleExitComplete = () => {
+    if (activeFilter === 'all' && !showAllProjects) {
+      const projectsSection = document.getElementById('projects');
+      const headerElement = document.querySelector('header');
+
+      if (projectsSection && headerElement) {
+        const headerHeight = headerElement.offsetHeight;
+        const projectsSectionTop = projectsSection.offsetTop;
+        const targetScrollY = projectsSectionTop - headerHeight;
+        window.scrollTo({ top: targetScrollY, behavior: 'smooth' });
+      } else {
+        console.warn("Could not find projects section or header for precise scrolling.");
+      }
+    }
+  };
+
+  const projectItemVariants = {
+    hidden: { opacity: 0, y: 30 },
+    visible: (i: number) => ({
+      opacity: 1,
+      y: 0,
+      transition: { delay: i * 0.1, duration: 0.5, ease: "easeOut" }
+    }),
+    exit: { opacity: 0, y: -20, transition: { duration: 0.3, ease: "easeIn" } }
+  };
+
   return (
-    // --- Applied scroll-mt-40 to offset scroll target by 10rem (header + padding) ---
-    <section
-      id="projects"
-      className="section bg-background py-20 scroll-mt-40" // Increased offset
-      ref={ref}
-    >
-      {/* --- --- */}
+    <section id="projects" className="section bg-background py-20" ref={ref}>
       <div className="container mx-auto px-4">
         {/* Title Section */}
         <motion.div
@@ -161,7 +212,13 @@ const Projects: React.FC = () => {
           {filters.map(filter => (
             <button
               key={filter.key}
-              onClick={() => setActiveFilter(filter.key)}
+              onClick={() => {
+                  setActiveFilter(filter.key);
+                  // Optional: Reset showAll state when changing filters away from 'all'
+                  // if (filter.key !== 'all') {
+                  //   setShowAllProjects(false);
+                  // }
+              }}
               className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
                 activeFilter === filter.key
                   ? 'bg-primary text-background'
@@ -176,55 +233,83 @@ const Projects: React.FC = () => {
         {/* Projects Grid */}
         <motion.div
           className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
-          initial={{ opacity: 0 }}
-          animate={inView ? { opacity: 1 } : {}}
-          transition={{ duration: 0.6, delay: 0.4 }}
+          layout
+          transition={{ duration: 0.5, ease: [0.43, 0.13, 0.23, 0.96] }}
         >
-          {filteredProjects.map((project, index) => (
-            <motion.div
-              key={project.id}
-              className="group bg-background border border-primary/20 rounded-lg overflow-hidden shadow-lg hover:shadow-primary/20 hover:border-primary/50 transition-all duration-500 flex flex-col"
-              initial={{ opacity: 0, y: 20 }}
-              animate={inView ? { opacity: 1, y: 0 } : {}} // Animate based on section visibility
-              transition={{ duration: 0.5, delay: 0.1 * index }}
-              whileHover={{ y: -10 }} // Subtle lift effect on hover
-            >
-              {/* Image Container */}
-              <div className="relative overflow-hidden h-48">
-                <img
-                  src={project.image}
-                  alt={project.title}
-                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" // Zoom effect on hover
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-background to-transparent opacity-80 group-hover:opacity-60 transition-opacity duration-300"></div>
-              </div>
-              {/* Content Container */}
-              <div className="p-6 flex flex-col flex-grow">
-                <h3 className="text-xl font-bold mb-2 text-primary">{project.title}</h3>
-                <p className="text-accent-dark mb-4 flex-grow">{project.description}</p>
-                {/* Tags */}
-                <div className="flex flex-wrap gap-2 mb-6 mt-auto"> {/* mt-auto pushes tags and link down */}
-                  {project.tags.map(tag => (
-                    <span key={tag} className="text-xs px-2 py-1 rounded-full bg-primary/10 text-primary">
-                      {tag}
-                    </span>
-                  ))}
+          <AnimatePresence initial={false} onExitComplete={handleExitComplete}>
+            {filteredProjects.map((project, index) => (
+              <motion.div
+                key={project.id}
+                className="group bg-background border border-primary/20 rounded-lg overflow-hidden shadow-lg hover:shadow-primary/20 hover:border-primary/50 transition-all duration-500 flex flex-col"
+                variants={projectItemVariants}
+                initial="hidden"
+                animate="visible"
+                exit="exit"
+                custom={index}
+                layout="position"
+              >
+                {/* Image Container */}
+                <div className="relative overflow-hidden h-48">
+                  <img
+                    src={project.image}
+                    alt={project.title}
+                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-background to-transparent opacity-80 group-hover:opacity-60 transition-opacity duration-300"></div>
                 </div>
-                {/* Code Link */}
-                <div className="flex justify-center">
-                  <a
-                    href={project.codeLink}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center text-sm font-medium text-primary hover:text-primary-light transition-colors"
-                  >
-                    <Github size={16} className="mr-1" /> View Code
-                  </a>
+                {/* Content Container */}
+                <div className="p-6 flex flex-col flex-grow">
+                  <h3 className="text-xl font-bold mb-2 text-primary">{project.title}</h3>
+                  <p className="text-accent-dark mb-4 flex-grow">{project.description}</p>
+                  <div className="flex flex-wrap gap-2 mb-6 mt-auto">
+                    {project.tags.map(tag => (
+                      <span key={tag} className="text-xs px-2 py-1 rounded-full bg-primary/10 text-primary">
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+                  <div className="flex justify-center">
+                    <a
+                      href={project.codeLink}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center text-sm font-medium text-primary hover:text-primary-light transition-colors"
+                    >
+                      <Github size={16} className="mr-1" /> View Code
+                    </a>
+                  </div>
                 </div>
-              </div>
-            </motion.div>
-          ))}
+              </motion.div>
+            ))}
+          </AnimatePresence>
         </motion.div>
+
+        {/* --- MODIFIED Show More/Less Button Condition --- */}
+        {activeFilter === 'all' && allProjects.length > INITIAL_PROJECT_IDS.length && (
+          <motion.div
+            className="text-center mt-10"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.5 }}
+          >
+            <button
+              onClick={handleToggleShowAll}
+              className="inline-flex items-center px-6 py-2 border border-primary text-primary font-medium rounded-md hover:bg-primary/10 transition-colors duration-300 text-sm"
+            >
+              {showAllProjects ? (
+                <>
+                  Show Fewer Projects <ChevronUp size={16} className="ml-1" />
+                </>
+              ) : (
+                <>
+                  Show All Projects <ChevronDown size={16} className="ml-1" />
+                </>
+              )}
+            </button>
+          </motion.div>
+        )}
+        {/* --- --- */}
+
       </div>
     </section>
   );
