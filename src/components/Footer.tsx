@@ -45,7 +45,7 @@ const Footer: React.FC = () => {
               </a>
             </div>
             <p className="text-sm text-accent-dark flex items-center">
-              Made with ❤️ &copy; {currentYear} Rohit Ray
+              Made with ❤️ &copy; {currentYear} Rohit Ray. All Rights Reserved
             </p>
           </div>
         </div>
