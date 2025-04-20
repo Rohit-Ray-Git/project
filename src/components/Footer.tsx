@@ -1,6 +1,5 @@
 import React from 'react';
 import { Link } from 'react-scroll';
-import { Heart } from 'lucide-react';
 
 const Footer: React.FC = () => {
   const currentYear = new Date().getFullYear();
