@@ -77,7 +77,7 @@ const About: React.FC = () => {
               Leveraging a strong <span className="text-primary">Computer Science</span> foundation, I operate as a Data Scientist focused on architecting impactful, data-driven solutions. I specialize in applying machine learning and advanced analytics to extract critical insights from complex datasets, effectively solving real-world problems.
             </p>
             <p className="text-lg leading-relaxed text-justify">
-              Committed to continuous learning at the forefront of AI and data science, I actively contribute to the open-source community and share knowledge through technical writing.
+            Dedicated to continuous learning at the forefront of AI and data science, I actively engage in research and development of innovative solutions. Through my work, I aim to bridge the gap between theoretical concepts and practical applications, making cutting-edge developments accessible to fellow practitioners.
             </p>
             {/* --- END OF CHANGES --- */}
           </motion.div>

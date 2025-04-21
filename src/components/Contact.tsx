@@ -69,7 +69,7 @@ const Contact: React.FC = () => {
 
   const contactInfo = [
     { icon: <Mail className="text-primary w-6 h-6" />, text: "rayrohit685@gmail.com" },
-    { icon: <Phone className="text-primary w-6 h-6" />, text: "+91 8260701843" },
+    { icon: <Phone className="text-primary w-6 h-6" />, text: "+91-8260701843" },
     { icon: <MapPin className="text-primary w-6 h-6" />, text: "Hyderabad, India" }
   ];
 
