@@ -1,8 +1,9 @@
 // Projects.tsx
 import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, useMotionValue, useTransform, useSpring } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
 import { Github, ChevronDown, ChevronUp } from 'lucide-react';
+import GlowEffect from './GlowEffect';
 
 // --- IMPORT YOUR PROJECT IMAGES HERE ---
 import project1Image from '../assets/images/projects/customer retention.png';
@@ -188,23 +189,23 @@ const Projects: React.FC = () => {
   };
 
   return (
-    <section id="projects" className="section bg-background py-20" ref={ref}>
-      <div className="container mx-auto px-4">
+    <section id="projects" className="section bg-background py-12 md:py-20" ref={ref}>
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         {/* Title Section */}
         <motion.div
-          className="text-center mb-16"
+          className="text-center mb-8 md:mb-16"
           initial={{ opacity: 0, y: 20 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6 }}
         >
-          <span className="text-primary font-medium">My Work</span>
-          <h2 className="text-3xl md:text-4xl font-bold mt-2 mb-6">Recent Projects</h2>
-          <div className="w-16 h-1 bg-primary mx-auto"></div>
+          <span className="text-primary font-medium text-sm md:text-base">My Work</span>
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mt-2 mb-4 md:mb-6">Recent Projects</h2>
+          <div className="w-12 md:w-16 h-1 bg-primary mx-auto"></div>
         </motion.div>
 
         {/* Filters Section */}
         <motion.div
-          className="flex flex-wrap justify-center mb-12 gap-3"
+          className="flex flex-wrap justify-center mb-8 md:mb-12 gap-2 md:gap-3"
           initial={{ opacity: 0, y: 20 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6, delay: 0.2 }}
@@ -212,14 +213,8 @@ const Projects: React.FC = () => {
           {filters.map(filter => (
             <button
               key={filter.key}
-              onClick={() => {
-                  setActiveFilter(filter.key);
-                  // Optional: Reset showAll state when changing filters away from 'all'
-                  // if (filter.key !== 'all') {
-                  //   setShowAllProjects(false);
-                  // }
-              }}
-              className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
+              onClick={() => setActiveFilter(filter.key)}
+              className={`px-3 md:px-4 py-1.5 md:py-2 rounded-full text-xs md:text-sm font-medium transition-all duration-300 ${
                 activeFilter === filter.key
                   ? 'bg-primary text-background'
                   : 'bg-background text-accent border border-primary/30 hover:border-primary'
@@ -232,7 +227,7 @@ const Projects: React.FC = () => {
 
         {/* Projects Grid */}
         <motion.div
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 lg:gap-8"
           layout
           transition={{ duration: 0.5, ease: [0.43, 0.13, 0.23, 0.96] }}
         >
@@ -240,43 +235,35 @@ const Projects: React.FC = () => {
             {filteredProjects.map((project, index) => (
               <motion.div
                 key={project.id}
-                className="group bg-background border border-primary/20 rounded-lg overflow-hidden shadow-lg hover:shadow-primary/20 hover:border-primary/50 transition-all duration-500 flex flex-col"
+                className="group bg-background border border-primary/20 rounded-lg overflow-hidden shadow-lg hover:shadow-primary/20 hover:border-primary/50 transition-all duration-500 flex flex-col cursor-pointer relative"
                 variants={projectItemVariants}
                 initial="hidden"
                 animate="visible"
                 exit="exit"
                 custom={index}
                 layout="position"
+                onClick={() => window.open(project.codeLink, '_blank')}
               >
-                {/* Image Container */}
-                <div className="relative overflow-hidden h-48">
+                <div className="relative overflow-hidden">
                   <img
                     src={project.image}
                     alt={project.title}
-                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                    className="w-full h-40 sm:h-48 object-cover transition-transform duration-500 group-hover:scale-110"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-background to-transparent opacity-80 group-hover:opacity-60 transition-opacity duration-300"></div>
+                  <div className="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                 </div>
-                {/* Content Container */}
-                <div className="p-6 flex flex-col flex-grow">
-                  <h3 className="text-xl font-bold mb-2 text-primary">{project.title}</h3>
-                  <p className="text-accent-dark mb-4 flex-grow">{project.description}</p>
-                  <div className="flex flex-wrap gap-2 mb-6 mt-auto">
-                    {project.tags.map(tag => (
-                      <span key={tag} className="text-xs px-2 py-1 rounded-full bg-primary/10 text-primary">
+                <div className="p-4 md:p-6 flex-grow">
+                  <h3 className="text-lg md:text-xl font-semibold mb-2 group-hover:text-primary transition-colors duration-300">{project.title}</h3>
+                  <p className="text-accent/80 text-sm md:text-base mb-4 line-clamp-3">{project.description}</p>
+                  <div className="flex flex-wrap gap-1.5 md:gap-2">
+                    {project.tags.map((tag, tagIndex) => (
+                      <span
+                        key={tagIndex}
+                        className="px-2 md:px-3 py-0.5 md:py-1 bg-primary/10 text-primary rounded-full text-xs md:text-sm"
+                      >
                         {tag}
                       </span>
                     ))}
-                  </div>
-                  <div className="flex justify-center">
-                    <a
-                      href={project.codeLink}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex items-center text-sm font-medium text-primary hover:text-primary-light transition-colors"
-                    >
-                      <Github size={16} className="mr-1" /> View Code
-                    </a>
                   </div>
                 </div>
               </motion.div>
@@ -284,17 +271,17 @@ const Projects: React.FC = () => {
           </AnimatePresence>
         </motion.div>
 
-        {/* --- MODIFIED Show More/Less Button Condition --- */}
+        {/* Show More/Less Button */}
         {activeFilter === 'all' && allProjects.length > INITIAL_PROJECT_IDS.length && (
           <motion.div
-            className="text-center mt-10"
+            className="text-center mt-8 md:mt-10"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.5 }}
           >
             <button
               onClick={handleToggleShowAll}
-              className="inline-flex items-center px-6 py-2 border border-primary text-primary font-medium rounded-md hover:bg-primary/10 transition-colors duration-300 text-sm"
+              className="inline-flex items-center px-4 md:px-6 py-1.5 md:py-2 border border-primary text-primary font-medium rounded-md hover:bg-primary/10 transition-colors duration-300 text-sm"
             >
               {showAllProjects ? (
                 <>
@@ -308,8 +295,6 @@ const Projects: React.FC = () => {
             </button>
           </motion.div>
         )}
-        {/* --- --- */}
-
       </div>
     </section>
   );

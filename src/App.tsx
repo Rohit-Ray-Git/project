@@ -1,25 +1,35 @@
+import { Suspense, lazy } from 'react';
 import Header from './components/Header';
-import Hero from './components/Hero';
-import About from './components/About';
-import Skills from './components/Skills';
-import Projects from './components/Projects';
-import Contact from './components/Contact';
 import Footer from './components/Footer';
 import Particles from './components/Particles';
+import LoadingSpinner from './components/LoadingSpinner';
+import BackToTop from './components/BackToTop';
+import LoadingProgress from './components/LoadingProgress';
+
+// Lazy load components
+const Hero = lazy(() => import('./components/Hero'));
+const About = lazy(() => import('./components/About'));
+const Skills = lazy(() => import('./components/Skills'));
+const Projects = lazy(() => import('./components/Projects'));
+const Contact = lazy(() => import('./components/Contact'));
 
 function App() {
   return (
     <div className="flex flex-col min-h-screen bg-background text-accent">
+      <LoadingProgress />
       <Particles />
       <Header />
       <main>
-        <Hero />
-        <About />
-        <Skills />
-        <Projects />
-        <Contact />
+        <Suspense fallback={<LoadingSpinner />}>
+          <Hero />
+          <About />
+          <Skills />
+          <Projects />
+          <Contact />
+        </Suspense>
       </main>
       <Footer />
+      <BackToTop />
     </div>
   );
 }
