@@ -1,0 +1,225 @@
+/* e:\Portfolio-2\project\src\index.css */
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Add this animation layer for the typing effect cursor */
+@layer utilities {
+  @keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+  }
+  .animate-blink {
+    animation: blink 0.7s infinite;
+  }
+}
+
+/* Styles for Skill bars (from Skills.tsx context) */
+.skill-bar {
+  @apply w-full bg-primary/10 rounded-full h-2.5 overflow-hidden;
+}
+
+.skill-progress {
+  @apply bg-primary h-full rounded-full;
+}
+
+/* Styles for Particles background (from Particles.tsx context) */
+.particles {
+  @apply fixed top-0 left-0 w-full h-full -z-10 pointer-events-none overflow-hidden;
+}
+
+.particle {
+  @apply absolute bg-primary/30 rounded-full;
+  /* Basic movement animation - can be enhanced */
+  animation: float 6s ease-in-out infinite;
+}
+
+@keyframes float {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-15px); }
+  100% { transform: translateY(0px); }
+}
+
+/* Glow effect (used in Header and Footer) */
+.glow {
+  /* FIXED: Using rgba for opacity */
+  text-shadow: 0 0 8px rgba(0, 255, 255, 0.5), 0 0 20px rgba(0, 255, 255, 0.3); 
+}
+
+/* Ensure body/html have full height for potential sticky footer or full-height sections */
+html, body, #root {
+  height: 100%;
+  scroll-behavior: smooth; /* Added for smoother scrolling */
+}
+
+/* General section styling */
+.section {
+  min-height: 100vh; /* Ensures sections generally take up viewport height */
+  padding-top: 80px; /* Default top padding to offset fixed header */
+  padding-bottom: 80px; /* Default bottom padding */
+  display: flex; /* Helps with vertical centering if needed */
+  align-items: center; /* Vertically center content within the section */
+}
+
+/* Specific offset for hero as header might be transparent initially */
+#hero {
+  padding-top: 0; /* Hero starts at the very top */
+  min-height: 100vh; /* Ensure hero fills viewport */
+}
+
+/* Glass effect for About section cards (from About.tsx context) */
+.glass {
+  background: rgba(255, 255, 255, 0.05); /* Adjust color and opacity as needed */
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px); /* For Safari */
+  /* FIXED: Using rgba for border opacity */
+  border: 1px solid rgba(0, 255, 255, 0.2); /* Assuming primary is rgb(0, 255, 255) */
+  border-radius: theme('borderRadius.lg'); /* Ensure consistent rounding */
+}
+
+/* Custom scrollbar (optional but nice) */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  /* Ensure 'background' color key exists in your theme */
+  background: theme('colors.background', '#0F172A'); /* Added fallback */
+}
+::-webkit-scrollbar-thumb {
+  /* FIXED: Using rgba for scrollbar opacity */
+  background: rgba(0, 255, 255, 0.5); /* Assuming primary is rgb(0, 255, 255) */
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  /* FIXED: Using theme() with .DEFAULT for the base color */
+  background: theme('colors.primary.DEFAULT', '#00FFFF'); /* Added .DEFAULT */
+}
+
+/* Ensure smooth scrolling for anchor links */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Add smooth scrolling to all elements */
+* {
+  scroll-behavior: smooth;
+}
+
+/* Add a loading progress bar */
+.loading-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 3px;
+  background: linear-gradient(to right, #4f46e5, #7c3aed);
+  z-index: 9999;
+  transition: width 0.3s ease;
+}
+
+/* Add loading skeleton animation */
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.skeleton {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+/* Add smooth transitions */
+.transition-all {
+  transition-property: all;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 300ms;
+}
+
+/* Add hover effects */
+.hover-scale {
+  transition: transform 0.3s ease;
+}
+
+.hover-scale:hover {
+  transform: scale(1.05);
+}
+
+/* Add focus styles for better accessibility */
+*:focus {
+  outline: 2px solid #4f46e5;
+  outline-offset: 2px;
+}
+
+/* Add loading state styles */
+.loading {
+  opacity: 0.7;
+  pointer-events: none;
+}
+
+/* Add error state styles */
+.error {
+  color: #ef4444;
+  border-color: #ef4444;
+}
+
+/* Add success state styles */
+.success {
+  color: #10b981;
+  border-color: #10b981;
+}
+
+/* Add responsive styles */
+@media (max-width: 640px) {
+  .container {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+}
+
+/* Add print styles */
+@media print {
+  .no-print {
+    display: none;
+  }
+}
+
+/* Add dark mode styles */
+@media (prefers-color-scheme: dark) {
+  .dark-mode {
+    background-color: #1a1a1a;
+    color: #ffffff;
+  }
+}
+
+/* Add reduced motion styles */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Skills section animations */
+@keyframes scroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(calc(-50% - 1rem));
+  }
+}
+
+.animate-scroll {
+  animation: scroll 30s linear infinite;
+}
+
+.animate-scroll:hover {
+  animation-play-state: paused;
+}
