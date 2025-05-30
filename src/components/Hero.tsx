@@ -103,7 +103,7 @@ const Hero: React.FC = () => {
   }, [text, isDeleting, wordIndex, words, pauseDuration, typingSpeed, deletingSpeed]);
 
   // CV path (no changes needed here)
-  const cvPath = 'https://drive.google.com/file/d/1EZ_p1Da-ypjtvC6oQZH6S7zPkT95ju6n/view?usp=sharing';
+  const cvPath = 'https://drive.google.com/file/d/1MOubhfQoRjmXbnxVwdG6jXX9mu0u806S/view?usp=sharing';
 
   return (
     <section id="hero" className="section relative flex items-center overflow-hidden min-h-screen"> {/* Ensure min-height */}
